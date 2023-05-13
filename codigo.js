@@ -64,33 +64,62 @@ function encriptar(palabra) {
 
 
   
-  // función para copiar el texto al portapapeles
+ // función para copiar el texto al portapapeles
   function copiarTexto(texto) {
-    const input = document.createElement("textarea");
-    input.value = texto;
-    document.body.appendChild(input);
-    input.select();
-    document.execCommand("copy");
-    document.body.removeChild(input);
-    alert('El texto se ha copiado al portapapeles.');
+  const textoNormalizado = texto.normalize("NFD");
+  const tieneAcentos = /[^\u0000-\u007F]/.test(textoNormalizado);
 
-    document.getElementById("texto").value = "";
-    document.getElementById("resultado").innerHTML = "";
+  if (tieneAcentos) {
+    alert('No se permiten letras o palabras con acento.');
+    return;
   }
+
+  const input = document.createElement("textarea");
+  input.value = texto;
+  document.body.appendChild(input);
+  input.select();
+  document.execCommand("copy");
+  document.body.removeChild(input);
+  alert('El texto se ha copiado al portapapeles.');
+
+  document.getElementById("texto").value = "";
+  document.getElementById("resultado").innerHTML = "";
+}
+
   
   // evento del botón de encriptar
   document.getElementById("encriptar").addEventListener("click", function() {
     const texto = document.getElementById("texto").value.toLowerCase();
+    
+    const textoNormalizado = texto.normalize("NFD");
+    const tieneAcentos = /[^\u0000-\u007F]/.test(textoNormalizado);
+    
+    if (tieneAcentos) {
+      alert('No se permiten letras o palabras con acento en el texto a encriptar.');
+      return;
+    }
+    
     const encriptado = encriptar(texto);
     document.getElementById("resultado").innerHTML = encriptado;
   });
   
+  
   // evento del botón de desencriptar
   document.getElementById("desencriptar").addEventListener("click", function() {
     const texto = document.getElementById("texto").value.toLowerCase();
+    
+    const textoNormalizado = texto.normalize("NFD");
+    const tieneAcentos = /[^\u0000-\u007F]/.test(textoNormalizado);
+    
+    if (tieneAcentos) {
+      alert('No se permiten letras o palabras con acento en el texto a desencriptar.');
+      return;
+    }
+    
     const desencriptado = desencriptar(texto);
     document.getElementById("resultado").innerHTML = desencriptado;
   });
+  
   
   // evento del botón de copiar
   document.getElementById("copiar").addEventListener("click", function() {
@@ -99,6 +128,7 @@ function encriptar(palabra) {
   });
   
  
+
 
 
 
